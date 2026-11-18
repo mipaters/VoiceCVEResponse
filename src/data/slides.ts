@@ -42,7 +42,7 @@ export const slides: Slide[] = [
     title: 'Scenario: a CVE in OpenSSL',
     subtitle: 'Illustrative CVE-2026-31337 hitting 9 of the 27 apps',
     bullets: [
-      'Intake Agent merges 5 alarms into 1 event; no approval needed',
+      'CVE Intake Agent merges 5 alarms into 1 event; no approval needed',
       'Impact found in 8 minutes: 9 apps, 7 actually use it, 3 are public-facing',
       'Test Agent catches 3 lab failures before production – fixed in the lab, not after a failed change',
       'Staged rollout inside business hours; closure brief to leadership posted by the Coordinator Agent',

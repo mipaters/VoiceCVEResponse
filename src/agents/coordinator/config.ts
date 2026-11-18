@@ -1,7 +1,7 @@
 // All content for the Coordinator Agent architecture view. Static, illustrative data only.
 
 export type Phase = 'crawl' | 'walk' | 'run';
-export type LinkedAgent = 'asset' | 'assessment';
+export type LinkedAgent = 'intake' | 'asset' | 'assessment';
 
 export const coordinatorAgentConfig = {
   title: 'Coordinator Agent – Architecture',
@@ -90,6 +90,7 @@ export const coordinatorAgentConfig = {
   ],
 
   connectedAgents: [
+    { id: 'intake' as LinkedAgent, name: 'CVE Intake Agent', skills: ['Capture', 'Enrich', 'Prioritise'], link: 'Open CVE Intake architecture' },
     { id: 'asset' as LinkedAgent, name: 'Asset Management Agent', skills: ['Ingest', 'Lifecycle', 'Audit'], link: 'Open Asset Management architecture' },
     { id: 'assessment' as LinkedAgent, name: 'Security Incident Assessment Agent', skills: ['Scope', 'Verify', 'Assess'], link: 'Open Security Incident Assessment architecture' },
   ],

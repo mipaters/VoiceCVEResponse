@@ -56,7 +56,7 @@ export const archLayers: ArchLayer[] = [
     name: 'Intelligence',
     color: '#a78bfa',
     nodes: [
-      { id: 'foundry', label: 'Azure AI Foundry agents', description: 'Intake, Asset Discovery, Assessment, Brief, Risk, Mitigation, Scheduling, Deploy, Test, Change and Compliance agents.', detail: ['Each agent has scoped tools and guardrails'], humanStages: [2, 3, 4, 7] },
+      { id: 'foundry', label: 'Azure AI Foundry agents', description: 'CVE Intake, Asset Discovery, Assessment, Brief, Risk, Mitigation, Scheduling, Deploy, Test, Change and Compliance agents.', detail: ['Each agent has scoped tools and guardrails'], humanStages: [2, 3, 4, 7] },
       { id: 'coordinator', label: 'Coordinator Agent', description: 'Assigns SMEs, posts status and leadership briefs to Teams.', detail: ['Orchestrates across stages'] },
       { id: 'sentinel', label: 'Sentinel / Security Copilot', description: 'Correlates exploitation attempts with affected apps.', detail: ['Escalates active exploitation'] },
     ],

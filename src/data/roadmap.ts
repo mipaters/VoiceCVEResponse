@@ -24,7 +24,7 @@ export const roadmap: Phase[] = [
     id: 'p1',
     name: 'Phase 1 – Risk, brief and strategy',
     timing: 'Q1–Q2',
-    outcomes: ['Intake and Risk Agents', 'Brief Agent for the Development Assessment Brief', 'Mitigation Agent with structured plans and vendor drafts', 'Teams approvals'],
+    outcomes: ['CVE Intake and Risk Agents', 'Brief Agent for the Development Assessment Brief', 'Mitigation Agent with structured plans and vendor drafts', 'Teams approvals'],
     kpis: ['Assessment brief turnaround', 'Leadership update effort', 'End-to-end MTTR'],
     prerequisites: ['Knowledge graph seeded with application owners', 'Vendor / contract data accessible', 'Approver matrix'],
   },

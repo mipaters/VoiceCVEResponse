@@ -12,7 +12,7 @@ export interface Agent {
 
 export const agents: Agent[] = [
   {
-    name: 'Intake Agent',
+    name: 'CVE Intake Agent',
     stages: '1 Identify Incident',
     purpose: 'Ingest and de-noise CVE alarms 24x7 so the rising event frequency stays manageable.',
     inputs: ['NVD', 'CISA KEV', 'EPSS', 'Vendor PSIRTs', 'Scanner findings'],

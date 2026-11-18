@@ -58,7 +58,7 @@ export const scenarioSteps: ScenarioStep[] = [
     stageName: 'Identify Incident',
     time: 'T+0:08',
     title: 'Alarm triaged automatically',
-    agent: 'Intake Agent',
+    agent: 'CVE Intake Agent',
     summary: 'Five alarms and two scanner findings collapse into one actionable event.',
     log: [
       'poll cisa-kev → new entry CVE-2026-31337 (OpenSSL 3.0.0–3.0.15)',

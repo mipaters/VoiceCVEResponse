@@ -18,7 +18,7 @@ export interface AiStage {
 export const aiStages: AiStage[] = [
   {
     id: 1,
-    agents: ['Intake Agent'],
+    agents: ['CVE Intake Agent'],
     actions: [
       'Ingests NVD, CISA KEV, EPSS and vendor PSIRTs 24x7',
       'Dedupes alarms and correlates with scanner findings',
@@ -28,8 +28,8 @@ export const aiStages: AiStage[] = [
     humanNote: 'None (auto-triage), with alerts to the security lead',
     aiSentiment: 3,
     resolutions: [
-      { pain: 'Alarms / CVE', agent: 'Intake Agent', how: 'Deduped and correlated with scanner findings' },
-      { pain: 'Increasing frequency of events', agent: 'Intake Agent', how: 'Noise suppressed; only actionable events surface' },
+      { pain: 'Alarms / CVE', agent: 'CVE Intake Agent', how: 'Deduped and correlated with scanner findings' },
+      { pain: 'Increasing frequency of events', agent: 'CVE Intake Agent', how: 'Noise suppressed; only actionable events surface' },
     ],
   },
   {
