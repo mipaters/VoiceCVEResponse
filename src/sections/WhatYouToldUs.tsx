@@ -42,7 +42,7 @@ export default function WhatYouToldUs() {
         <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-white"><Users className="h-5 w-5 text-accent" /> Dot-voting results</h2>
         <PrioritiesBoard />
         <div className="mt-4 rounded-lg border border-accent/50 bg-accent/10 p-3">
-          <div className="text-sm font-semibold text-accent">Phase 0 POC scope (from the top 3)</div>
+          <div className="text-sm font-semibold text-accent">Phase 0 POC scope (phased start: Intake → Asset → Assessment)</div>
           <div className="mt-2 flex flex-wrap gap-2">
             {agents.map((a) => <span key={a} className="chip border-accent/60 text-accent">{a}</span>)}
           </div>

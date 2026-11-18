@@ -13,8 +13,8 @@ export const roadmap: Phase[] = [
     name: 'Phase 0 – POC on the top 3 jobs',
     timing: '30 days',
     outcomes: [
+      'CVE Intake Agent feeding the Security Incident Assessment Agent, which checks the Asset Discovery inventory first',
       'Asset Discovery + Security Incident Assessment Agents on the ~27 applications',
-      'Coordinator Agent assigning SMEs and posting updates in Teams',
       'Validated baselines for every KPI',
     ],
     kpis: ['2–3 hrs → < 10 min to find what\'s impacted', 'Assets discovered vs CMDB', '% version checks automated'],
@@ -24,7 +24,7 @@ export const roadmap: Phase[] = [
     id: 'p1',
     name: 'Phase 1 – Risk, brief and strategy',
     timing: 'Q1–Q2',
-    outcomes: ['CVE Intake and Risk Agents', 'Brief Agent for the Development Assessment Brief', 'Mitigation Agent with structured plans and vendor drafts', 'Teams approvals'],
+    outcomes: ['Coordinator Agent assigning SMEs and posting updates in Teams', 'Risk Agent', 'Brief Agent for the Development Assessment Brief', 'Mitigation Agent with structured plans and vendor drafts', 'Teams approvals'],
     kpis: ['Assessment brief turnaround', 'Leadership update effort', 'End-to-end MTTR'],
     prerequisites: ['Knowledge graph seeded with application owners', 'Vendor / contract data accessible', 'Approver matrix'],
   },

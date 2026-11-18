@@ -27,7 +27,7 @@ export const slides: Slide[] = [
     subtitle: 'Dot voting – Jay\'s super votes weighted x2',
     visual: 'priorities',
     bullets: [],
-    notes: ['Read from the whiteboard photo – confirm the counts with the room.', 'The top 3 define the Phase 0 POC scope; adjust votes live if they change.'],
+    notes: ['Read from the whiteboard photo – confirm the counts with the room.', 'The top 3 jobs frame the Phase 0 POC; the phased start is CVE Intake, Asset Discovery, then Security Incident Assessment. Adjust votes live if they change.'],
   },
   {
     id: 3,
@@ -87,8 +87,8 @@ export const slides: Slide[] = [
     title: 'The ask: 30-day POC',
     subtitle: 'On your top 3 jobs',
     bullets: [
+      'Phased start: CVE Intake → Asset Discovery → Security Incident Assessment Agents',
       'Identify all our assets – Asset Discovery + Security Incident Assessment Agents',
-      'Stage coordination – right SMEs to do the upgrade – Coordinator Agent',
       'Log in to asset / detect vulnerability – read-only assessment automation',
       'Need: sponsor, read-only access to CMDB / inventory / scanners, 3–4 application owners',
     ],

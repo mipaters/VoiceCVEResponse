@@ -12,7 +12,7 @@ export default function Roadmap() {
       <SectionHeader title="Roadmap" subtitle="From a 30-day proof of concept on your top 3 jobs to closed-loop, policy-governed remediation." right={<Badge kind="illustrative" />} />
       <div className="card mb-4 border-accent/50">
         <div className="flex flex-wrap items-center gap-2">
-          <h2 className="text-lg font-semibold text-white">Phase 0 POC scope – from your dot vote</h2>
+          <h2 className="text-lg font-semibold text-white">Phase 0 POC scope – your top voted jobs, delivered by the first three agents</h2>
           <Badge kind="customer" />
         </div>
         <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm text-slate-200">{top.map((t) => <li key={t.id}>{t.job}</li>)}</ol>

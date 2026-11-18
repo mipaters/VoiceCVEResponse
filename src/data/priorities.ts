@@ -32,8 +32,10 @@ export const rank = (items: Priority[]) =>
     .sort((a, b) => score(b.p) - score(a.p) || a.i - b.i)
     .map((x) => x.p);
 
+// Phased start: intake first, then the inventory, then assessment against that inventory.
+export const PHASE0_AGENTS = ['CVE Intake Agent', 'Asset Discovery Agent', 'Security Incident Assessment Agent'];
+
 export const phase0Scope = (items: Priority[]) => {
   const top = rank(items).filter((p) => score(p) > 0).slice(0, 3);
-  const agents = Array.from(new Set(top.flatMap((p) => p.agents)));
-  return { top, agents };
+  return { top, agents: PHASE0_AGENTS };
 };
