@@ -45,17 +45,6 @@ export const agents: Agent[] = [
     kpi: 'Time to find what\'s impacted; % version checks automated',
   },
   {
-    name: 'Brief Agent',
-    stages: '2 Assessment',
-    purpose: 'Auto-draft the Development Assessment Brief and exec summary of exposure.',
-    inputs: ['Assessment results', 'Knowledge graph'],
-    outputs: ['Assessment brief', 'Exec summary of exposure'],
-    tools: ['Document generator', 'Teams'],
-    checkpoint: 'Jay reviews and approves in Teams',
-    guardrails: ['Every figure traceable to source data', 'Grounded citations'],
-    kpi: 'Assessment brief turnaround',
-  },
-  {
     name: 'Briefing Agent',
     stages: '2 Assessment',
     purpose: 'Turn the Technical Assessment Spec into audience-specific communication: the executive brief, the LT notification and the podcast summary.',

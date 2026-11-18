@@ -15,7 +15,7 @@ export const initialPriorities: Priority[] = [
   { id: 'coordination', job: 'Stage coordination – right SMEs to do the upgrade', teamVotes: 2, superVotes: 1, agents: ['Coordinator Agent'] },
   { id: 'detect', job: 'Log in to asset / detect vulnerability', teamVotes: 1, superVotes: 1, agents: ['Security Incident Assessment Agent'] },
   { id: 'osversion', job: 'Identify the right version of OS', teamVotes: 0, superVotes: 0, agents: ['Security Incident Assessment Agent'] },
-  { id: 'brief', job: 'Develop assessment brief', teamVotes: 0, superVotes: 0, agents: ['Brief Agent'] },
+  { id: 'brief', job: 'Develop assessment brief', teamVotes: 0, superVotes: 0, agents: ['Briefing Agent'] },
   { id: 'vendor', job: 'Engage a vendor', teamVotes: 0, superVotes: 0, agents: ['Mitigation Agent'] },
   { id: 'verify', job: 'Verify the new version will work (i.e. the upgrade)', teamVotes: 0, superVotes: 0, agents: ['Mitigation Agent', 'Test Agent'] },
   { id: 'mop', job: 'MOP creation', teamVotes: 0, superVotes: 0, agents: ['Change Agent'] },

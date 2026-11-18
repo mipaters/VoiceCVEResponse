@@ -92,7 +92,7 @@ export const scenarioSteps: ScenarioStep[] = [
     stageName: 'Assessment',
     time: 'T+0:25',
     title: 'Impact found in minutes, brief drafted',
-    agent: 'Asset Discovery + Assessment + Brief Agents',
+    agent: 'Asset Discovery + Assessment + Briefing Agents',
     summary: `Unified inventory finds ${f.appsAffected} of ${f.appsTotal} apps with the affected package in 8 minutes – no manual log-ins.`,
     log: [
       'asset-discovery → merge cmdb + hypervisor/VM inventory + package manifests + scanners',

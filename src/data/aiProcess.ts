@@ -34,13 +34,13 @@ export const aiStages: AiStage[] = [
   },
   {
     id: 2,
-    agents: ['Asset Discovery Agent', 'Security Incident Assessment Agent', 'Brief Agent'],
+    agents: ['Asset Discovery Agent', 'Security Incident Assessment Agent', 'Briefing Agent'],
     actions: [
       'Builds a unified asset / software inventory across the 27 apps and on-prem private cloud (CMDB + hypervisor/VM inventory + package manifests + scanners)',
       'Collects OS and package versions through read-only automation (Ansible / agents) in parallel – no manual log-ins',
       'Checks whether the vulnerable component is actually in use',
       'Captures tribal knowledge in a knowledge graph (app → owner → infra → dependencies)',
-      'Brief Agent auto-drafts the Development Assessment Brief + exec summary of exposure',
+      'Briefing Agent turns the Technical Assessment Spec into the exec brief, LT alert and podcast summary',
     ],
     human: 'Jay reviews and approves in Teams',
     kpi: '2–3 hrs → <10 min to find what\'s impacted',
