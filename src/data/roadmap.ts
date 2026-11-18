@@ -13,7 +13,7 @@ export const roadmap: Phase[] = [
     name: 'Phase 0 – POC on the top 3 jobs',
     timing: '30 days',
     outcomes: [
-      'Asset Discovery + Assessment Agents on the ~27 applications',
+      'Asset Discovery + Security Incident Assessment Agents on the ~27 applications',
       'Coordinator Agent assigning SMEs and posting updates in Teams',
       'Validated baselines for every KPI',
     ],

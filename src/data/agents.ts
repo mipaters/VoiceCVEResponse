@@ -34,7 +34,7 @@ export const agents: Agent[] = [
     kpi: 'Assets discovered vs CMDB',
   },
   {
-    name: 'Assessment Agent',
+    name: 'Security Incident Assessment Agent',
     stages: '2 Assessment',
     purpose: 'Collect OS and package versions in parallel and check whether the vulnerable component is actually in use – no manual log-ins.',
     inputs: ['Unified inventory', 'CVE record'],

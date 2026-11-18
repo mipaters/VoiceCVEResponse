@@ -87,7 +87,7 @@ export const slides: Slide[] = [
     title: 'The ask: 30-day POC',
     subtitle: 'On your top 3 jobs',
     bullets: [
-      'Identify all our assets – Asset Discovery + Assessment Agents',
+      'Identify all our assets – Asset Discovery + Security Incident Assessment Agents',
       'Stage coordination – right SMEs to do the upgrade – Coordinator Agent',
       'Log in to asset / detect vulnerability – read-only assessment automation',
       'Need: sponsor, read-only access to CMDB / inventory / scanners, 3–4 application owners',

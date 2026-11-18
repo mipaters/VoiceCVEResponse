@@ -34,7 +34,7 @@ export const aiStages: AiStage[] = [
   },
   {
     id: 2,
-    agents: ['Asset Discovery Agent', 'Assessment Agent', 'Brief Agent'],
+    agents: ['Asset Discovery Agent', 'Security Incident Assessment Agent', 'Brief Agent'],
     actions: [
       'Builds a unified asset / software inventory across the 27 apps and on-prem private cloud (CMDB + hypervisor/VM inventory + package manifests + scanners)',
       'Collects OS and package versions through read-only automation (Ansible / agents) in parallel – no manual log-ins',
@@ -48,9 +48,9 @@ export const aiStages: AiStage[] = [
     resolutions: [
       { pain: 'Ops owns 27 apps, different infra environments', agent: 'Asset Discovery Agent', how: 'One unified inventory across all 27 apps and environments' },
       { pain: 'Fragmented process, data, tribal knowledge', agent: 'Asset Discovery Agent', how: 'Knowledge graph: app → owner → infra → dependencies' },
-      { pain: 'Human error can happen – engineers are app specialists, not security experts', agent: 'Assessment Agent', how: 'Version and usage checks run by read-only automation, not by hand' },
+      { pain: 'Human error can happen – engineers are app specialists, not security experts', agent: 'Security Incident Assessment Agent', how: 'Version and usage checks run by read-only automation, not by hand' },
       { pain: '95% on-prem private cloud', agent: 'Asset Discovery Agent', how: 'Read-only connectors reach on-prem / private cloud (Azure Arc, Ansible)' },
-      { pain: '2–3 hrs to find what\'s impacted', agent: 'Assessment Agent', how: 'Parallel collection – target < 10 min' },
+      { pain: '2–3 hrs to find what\'s impacted', agent: 'Security Incident Assessment Agent', how: 'Parallel collection – target < 10 min' },
       { pain: 'Discovery / system knowledge scattered', agent: 'Asset Discovery Agent', how: 'CMDB, hypervisor/VM inventory, manifests and scanners merged' },
     ],
   },
