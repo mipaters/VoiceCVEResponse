@@ -95,14 +95,14 @@ export default function ArtefactView({ a }: { a: Artefact }) {
                   {w.status === 'green' && <CheckCircle2 className="h-4 w-4 text-emerald-400" />}
                   {w.status === 'paused' && <PauseCircle className="h-4 w-4 text-amber-400" />}
                   {w.status === 'resumed' && <RotateCw className="h-4 w-4 text-sky-400" />}
-                  {w.name} <span className="text-sm font-normal text-slate-400">· {w.nodes}</span>
+                  {w.name} <span className="text-sm font-normal text-slate-400">· {w.apps}</span>
                 </div>
                 <span className={`chip ${w.status === 'paused' ? 'border-amber-500 text-amber-300' : ''}`}>{w.status.toUpperCase()}</span>
               </div>
               <div className="grid grid-cols-3 gap-3 text-center">
-                <Metric label="ASR" value={`${w.asr}%`} ok={w.asr >= 98.5} />
-                <Metric label="MOS" value={w.mos.toFixed(1)} ok={w.mos >= 4.0} />
-                <Metric label="PDD" value={`${w.pdd.toFixed(1)} s`} ok={w.pdd <= 2.5} />
+                <Metric label="Availability" value={`${w.availability}%`} ok={w.availability >= 99.9} />
+                <Metric label="Error rate" value={`${w.errorRate}%`} ok={w.errorRate <= 1} />
+                <Metric label="p95 latency" value={`${w.p95} ms`} ok={w.p95 <= 250} />
               </div>
               {w.note && (
                 <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-300">
@@ -111,7 +111,7 @@ export default function ArtefactView({ a }: { a: Artefact }) {
               )}
             </div>
           ))}
-          <div className="text-xs text-slate-500">Guardrails: ASR ≥ 98.5%, MOS ≥ 4.0, PDD ≤ 2.5 s</div>
+          <div className="text-xs text-slate-500">Guardrails: availability ≥ 99.9%, error rate ≤ 1%, p95 ≤ 250 ms</div>
         </div>
       )}
     </div>
@@ -126,3 +126,4 @@ function Metric({ label, value, ok }: { label: string; value: string; ok: boolea
     </div>
   );
 }
+

@@ -1,8 +1,8 @@
-# VoiceShield AI – AI-Assisted CVE Lifecycle Demo
+# VoiceShield AI – AI-Assisted CVE Response Demo
 
-Click-through demo for an enterprise voice network operator, comparing **Today (manual process)** with **AI-Assisted** CVE management. Client-side only (React 18, Vite, TypeScript, Tailwind, Recharts, Framer Motion, lucide-react) with mock data – no backend, no API keys.
+Click-through demo built on the customer's **actual "Current Security Response Process"** (whiteboard: journey map, jobs-to-be-done, dot voting). Client-side only (React 18, Vite, TypeScript, Tailwind, Recharts, Framer Motion, lucide-react) with mock data – no backend, no API keys.
 
-> Illustrative demo – mock data and fictional CVE identifiers. All figures are illustrative targets, to be validated in discovery.
+> Badges: **Customer-validated (workshop)** = from the whiteboard; **Customer-quoted baseline** = "2–3 hrs to find what's impacted" (the only quoted metric); **Illustrative – to be validated** = everything else (KPIs, scenario, CVE-2026-31337).
 
 ## Run
 
@@ -14,30 +14,29 @@ npm run build    # type-check + production build to dist/
 
 ## Sections
 
-1. Executive Summary – animated KPI cards, value at stake (editable outage-minute cost)
-2. Today vs AI-Assisted – nine-stage swimlane, "Show pain points / Show AI value"
-3. Scenario Walkthrough – 10-step CVE-2026-41877 story (← → keys, approve/modify/reject)
-4. KPI Dashboard – Recharts visuals and KPI definitions
-5. Reference Architecture – clickable layers, autonomy slider (L1–L4)
-6. Agent Catalogue
-7. Roadmap
-8. Executive Walkthrough – full-screen presenter mode (← → / Space, `N` toggles notes, `Esc` exits)
+1. Executive Summary – animated KPI cards (8 KPIs), editable value model (CVE events/year, engineer cost)
+2. What you told us – the board recreated digitally: context, quoted metric, journey map, editable dot-vote results, Phase 0 scope
+3. Today vs AI-Assisted – 8-stage journey map with sentiment curve (+3 to −3); "Today" / "With AI" toggle shows the resolving agent per pain point
+4. Scenario Walkthrough – OpenSSL CVE hitting 9 of 27 apps, 9 steps incl. a lab-failure loop-back caught by the Test Agent (← → keys)
+5. KPI Dashboard
+6. Reference Architecture – on-prem / private cloud connectors via Azure Arc, autonomy slider (L1–L4)
+7. Agent Catalogue – Phase 0 agents highlighted from the vote
+8. Roadmap – Phase 0 scope derived from the top 3 priorities
+9. Executive Walkthrough – 7-slide presenter mode (← → / Space, `N` notes, `Esc` exits)
 
-The header **persona toggle** (CTO | CISO | NetOps | Change Manager) reorders KPIs and changes the focus statement.
+The header **persona toggle** reorders KPIs and changes the focus statement. Votes edited on "What you told us" (team votes, Jay's super votes ×2) drive the Phase 0 scope everywhere, including the presenter slides.
 
 ## Editing data
 
-All content lives in `src/data/`. Every KPI number is in `src/data/kpis.ts` (KPIs, value model, chart series, KPI definitions, scenario facts). Other files: `scenario.ts`, `stages.ts`, `architecture.ts`, `agents.ts`, `roadmap.ts`, `slides.ts`.
+All content lives in `src/data/`: `currentProcess.ts` (customer stages, jobs, pain points, sentiment), `aiProcess.ts` (agents, human gates, pain→agent resolutions), `priorities.ts` (dot-vote seed – "Read from whiteboard photo – confirm counts"), `kpis.ts`, `scenario.ts`, `architecture.ts`, `agents.ts`, `roadmap.ts`, `slides.ts`.
 
-## Demo talk track (≈ 15 min)
+## Talk track (≈ 15 min)
 
-1. **Exec Summary (2 min)** – "38 days to 6 days." Click Replay; switch persona to match the room. Adjust the outage-minute cost live.
-2. **Scenario Walkthrough (6 min)** – a KEV-listed SIP pre-auth RCE hits the SBCs. Press Approve at each checkpoint. Land three moments: 12-minute detection with blast radius (1,140 customers, 41 E911), CAB approval in 35 minutes, and the canary auto-pause on a PDD spike.
-3. **Today vs AI-Assisted (2 min)** – toggle pain points / AI value; show the human checkpoint at every stage.
-4. **KPI Dashboard (1 min)** – definitions and data sources make the targets testable.
-5. **Architecture and agents (2 min)** – move the autonomy slider; no production change without human approval.
-6. **Roadmap and ask (2 min)** – or launch Executive Walkthrough: approve the 30-day Phase 0 POC.
-
+1. **What you told us (3 min)** – replay their board; confirm vote counts; land "2–3 hrs".
+2. **Today vs AI (3 min)** – toggle With AI; lowest point is Validation for Lab.
+3. **Scenario (5 min)** – step through; point out the lab failure caught before production.
+4. **KPIs, architecture (2 min)** – baselines get validated in the POC.
+5. **Ask (2 min)** – 30-day POC on the top 3 jobs.
 ## Deploy to Azure Static Web Apps
 
 `staticwebapp.config.json` provides the SPA fallback.
@@ -48,3 +47,4 @@ npx @azure/static-web-apps-cli deploy ./dist --env production
 ```
 
 Or in the Azure portal create a Static Web App from the GitHub repo with: App location `/`, Output location `dist`, Build command `npm run build`. The generated GitHub Actions workflow then deploys on every push.
+

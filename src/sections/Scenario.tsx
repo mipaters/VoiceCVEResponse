@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, ChevronLeft, ChevronRight, Clock, Pencil, RotateCcw, Terminal, Users, X } from 'lucide-react';
+import { Bot, Check, ChevronLeft, ChevronRight, Clock, Pencil, RotateCcw, Terminal, Undo2, Users, X } from 'lucide-react';
 import { scenarioSteps, scenarioTitle } from '../data/scenario';
 import { scenarioSummary } from '../data/kpis';
-import { SectionHeader } from '../components/ui';
+import { Badge, SectionHeader } from '../components/ui';
 import ArtefactView from '../components/ArtefactView';
 
 type Choice = 'approve' | 'modify' | 'reject';
@@ -44,7 +44,7 @@ export default function Scenario() {
   const [choices, setChoices] = useState<Record<number, Choice>>({});
   const step = scenarioSteps[idx];
   const last = idx === scenarioSteps.length - 1;
-  const showSummary = last && choices[step.id] === 'approve';
+  const showSummary = last && (!step.decision || choices[step.id] === 'approve');
 
   const next = useCallback(() => setIdx((i) => Math.min(i + 1, scenarioSteps.length - 1)), []);
   const back = useCallback(() => setIdx((i) => Math.max(i - 1, 0)), []);
@@ -60,12 +60,12 @@ export default function Scenario() {
   }, [next, back]);
 
   const choice = choices[step.id];
-  const outcome = choice ? step.decision[`${choice}Outcome` as const] : undefined;
+  const outcome = choice && step.decision ? step.decision[`${choice}Outcome` as const] : undefined;
 
   return (
     <div>
       <SectionHeader title="Scenario Walkthrough" subtitle={scenarioTitle} right={
-        <button className="btn" onClick={() => { setChoices({}); setIdx(0); }}><RotateCcw className="h-4 w-4" /> Restart</button>
+        <div className="flex items-center gap-2"><Badge kind="illustrative" /><button className="btn" onClick={() => { setChoices({}); setIdx(0); }}><RotateCcw className="h-4 w-4" /> Restart</button></div>
       } />
 
       <div className="mb-6 overflow-x-auto">
@@ -75,11 +75,11 @@ export default function Scenario() {
               <button
                 onClick={() => setIdx(i)}
                 className={`flex flex-col items-center rounded-lg px-3 py-2 text-xs transition ${
-                  i === idx ? 'bg-accent text-noc-950' : choices[s.id] ? 'bg-emerald-500/15 text-emerald-300' : 'bg-noc-800 text-slate-400 hover:text-white'
+                  i === idx ? 'bg-accent text-noc-950' : s.loopBack ? 'bg-red-500/15 text-red-300' : choices[s.id] ? 'bg-emerald-500/15 text-emerald-300' : 'bg-noc-800 text-slate-400 hover:text-white'
                 }`}
               >
                 <span className="font-mono font-semibold">{s.time}</span>
-                <span className="mt-0.5 max-w-[110px] truncate">{s.id}. {s.title}</span>
+                <span className="mt-0.5 max-w-[110px] truncate">{s.id}. {s.title}</span><span className="text-[10px] opacity-70">Stage {s.stageId}</span>
               </button>
               {i < scenarioSteps.length - 1 && <span className="mx-1 h-px w-4 bg-noc-600" />}
             </li>
@@ -93,6 +93,9 @@ export default function Scenario() {
             <div className="mb-1 flex items-center gap-3">
               <span className="rounded-md bg-accent/15 px-2 py-1 font-mono text-sm font-bold text-accent">{step.time}</span>
               <span className="text-sm text-slate-400">Step {step.id} of {scenarioSteps.length}</span>
+              <span className="chip">Stage {step.stageId} · {step.stageName}</span>
+              {step.loopBack && <span className="chip border-red-500/60 text-red-300"><Undo2 className="mr-1 inline h-3 w-3" />Lab failure loop-back</span>}
+              <Badge kind="customer" />
             </div>
             <h2 className="text-2xl font-bold text-white">{step.title}</h2>
             <p className="mt-1 text-slate-300">{step.summary}</p>
@@ -111,6 +114,7 @@ export default function Scenario() {
         </div>
 
         <div className="space-y-5 xl:col-span-2">
+          {step.decision ? (
           <div className="card border-amber-500/40">
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-amber-300">
               <Users className="h-4 w-4" /> What the human decided – {step.decision.approver}
@@ -127,13 +131,19 @@ export default function Scenario() {
               </motion.div>
             )}
           </div>
+          ) : (
+          <div className="card border-emerald-500/40">
+            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-emerald-300"><Bot className="h-4 w-4" /> Automatic – no approval needed</div>
+            <p className="text-slate-200">{step.autoNote}</p>
+          </div>
+          )}
 
           <div className="card border-rose-500/30">
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-rose-300">
               <Clock className="h-4 w-4" /> Today comparison
             </div>
             <p className="text-slate-200">
-              In the current process this step takes <span className="font-bold text-rose-300">{step.today.days}</span> and involves <span className="font-bold text-rose-300">{step.today.people}</span>.
+              In your current process this stage takes <span className="font-bold text-rose-300">{step.today.days}</span> and involves <span className="font-bold text-rose-300">{step.today.people}</span>.
             </p>
             <p className="mt-2 text-sm text-slate-400">{step.today.detail}</p>
           </div>
@@ -144,14 +154,14 @@ export default function Scenario() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="card mt-6 border-emerald-500/40">
           <h3 className="mb-4 text-xl font-bold text-white">Scenario summary</h3>
           <div className="grid gap-4 sm:grid-cols-3">
-            <Compare label="Total elapsed" today={scenarioSummary.elapsedToday} ai={scenarioSummary.elapsedAi} />
-            <Compare label="Analyst hours" today={String(scenarioSummary.analystHoursToday)} ai={String(scenarioSummary.analystHoursAi)} />
+            <Compare label="Time to find what's impacted" today={scenarioSummary.findToday} ai={scenarioSummary.findAi} />
+            <Compare label="After-hours / weekend" today={scenarioSummary.afterHoursToday} ai={scenarioSummary.afterHoursAi} />
             <div className="rounded-lg bg-noc-900 p-4 text-center">
-              <div className="text-sm text-slate-400">Customer-impacting incidents</div>
-              <div className="mt-1 text-4xl font-bold text-emerald-400">{scenarioSummary.incidents}</div>
+              <div className="text-sm text-slate-400">Production failures looped back to lab</div>
+              <div className="mt-1 text-4xl font-bold text-emerald-400">{scenarioSummary.productionFailures}</div>
             </div>
           </div>
-          <p className="mt-3 text-xs text-amber-300">Illustrative targets – to be validated in discovery</p>
+          <p className="mt-3 text-xs text-amber-300">Only the 2–3 hrs baseline is customer-quoted; all other figures are illustrative – to be validated</p>
         </motion.div>
       )}
 
@@ -176,3 +186,5 @@ function Compare({ label, today, ai }: { label: string; today: string; ai: strin
     </div>
   );
 }
+
+

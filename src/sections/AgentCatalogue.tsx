@@ -1,6 +1,8 @@
 import { Bot, ShieldCheck, Target, UserCheck, Wrench } from 'lucide-react';
 import { agents } from '../data/agents';
-import { SectionHeader } from '../components/ui';
+import { phase0Scope } from '../data/priorities';
+import { usePriorities } from '../components/PersonaContext';
+import { Badge, SectionHeader } from '../components/ui';
 
 function List({ items }: { items: string[] }) {
   return (
@@ -11,16 +13,20 @@ function List({ items }: { items: string[] }) {
 }
 
 export default function AgentCatalogue() {
+  const { items } = usePriorities();
+  const phase0 = new Set(phase0Scope(items).agents);
   return (
     <div>
-      <SectionHeader title="Agent Catalogue" subtitle="Specialist agents orchestrated by a supervisor, each with a human checkpoint and explicit guardrails." />
+      <SectionHeader title="Agent Catalogue" subtitle="One agent per stage of your process plus a Coordinator, each with a human checkpoint and explicit guardrails." right={<Badge kind="illustrative" />} />
       <div className="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
         {agents.map((a) => (
-          <div key={a.name} className="card flex flex-col gap-3">
-            <div className="flex items-center gap-2">
+          <div key={a.name} className={`card flex flex-col gap-3 ${phase0.has(a.name) ? 'border-accent/60' : ''}`}>
+            <div className="flex flex-wrap items-center gap-2">
               <Bot className="h-5 w-5 text-accent" />
               <h3 className="text-lg font-bold text-white">{a.name}</h3>
+              {phase0.has(a.name) && <span className="chip border-accent/60 text-accent">Phase 0 POC</span>}
             </div>
+            <div className="text-xs text-slate-500">Stage: {a.stages}</div>
             <p className="text-sm text-slate-300">{a.purpose}</p>
             <div>
               <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">Inputs</div>

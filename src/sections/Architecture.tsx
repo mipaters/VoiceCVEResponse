@@ -1,21 +1,22 @@
 import { useState } from 'react';
 import { ArrowDown, Bot, UserCheck } from 'lucide-react';
 import { archLayers, autonomyLevels, type ArchNode } from '../data/architecture';
-import { stages } from '../data/stages';
-import { SectionHeader } from '../components/ui';
+import { currentStages as stages } from '../data/currentProcess';
+import { Badge, SectionHeader } from '../components/ui';
 
 export default function Architecture() {
   const [selected, setSelected] = useState<ArchNode>(archLayers[2].nodes[0]);
   const [level, setLevel] = useState(3);
   const auto = autonomyLevels.find((l) => l.level === level)!;
 
-  const needsHuman = (n: ArchNode) => !!n.humanStepsAffected?.some((s) => auto.humanStages.includes(s));
+  const needsHuman = (n: ArchNode) => !!n.humanStages?.some((s) => auto.humanStages.includes(s));
 
   return (
     <div>
       <SectionHeader
         title="Reference Architecture"
-        subtitle="Click any component to see its role. Move the autonomy slider to see which lifecycle steps stay human-approved."
+        subtitle="Click any component to see its role. Move the autonomy slider to see which of your 8 stages stay human-approved. On-prem / private-cloud estate connects via Azure Arc."
+        right={<Badge kind="illustrative" />}
       />
 
       <div className="card mb-6">
@@ -36,7 +37,7 @@ export default function Architecture() {
             className="w-64 accent-cyan-400"
           />
         </div>
-        <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-9">
+        <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-8">
           {stages.map((s) => {
             const human = auto.humanStages.includes(s.id);
             return (
@@ -101,3 +102,4 @@ export default function Architecture() {
     </div>
   );
 }
+

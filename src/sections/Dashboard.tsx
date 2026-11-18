@@ -4,17 +4,22 @@ import {
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
 import {
-  DISCLAIMER_FIGURES, autoTriage, backlogBurndown, changeSuccess, effortByStage, exposureTrend, kpiDefinitions, mttrBySeverity,
+  DISCLAIMER_FIGURES, kpiDefinitions, kpis, mttrByStage, verifiedInventory, versionChecks,
 } from '../data/kpis';
-import { Disclaimer, SectionHeader } from '../components/ui';
+import { currentStages } from '../data/currentProcess';
+import { aiStages } from '../data/aiProcess';
+import { Badge, Disclaimer, SectionHeader } from '../components/ui';
 
 const TODAY = '#fb7185';
 const AI = '#34d399';
-const STAGE_COLORS = ['#38bdf8', '#818cf8', '#a78bfa', '#f472b6', '#fb7185', '#fbbf24', '#a3e635', '#34d399', '#2dd4bf'];
+const STAGE_COLORS = ['#38bdf8', '#818cf8', '#a78bfa', '#f472b6', '#fb7185', '#fbbf24', '#a3e635', '#34d399'];
 const effortStacked = [
-  { name: 'Today', ...Object.fromEntries(effortByStage.map((s) => [s.stage, s.today])) },
-  { name: 'AI-assisted', ...Object.fromEntries(effortByStage.map((s) => [s.stage, s.ai])) },
+  { name: 'Today', ...Object.fromEntries(mttrByStage.map((s) => [s.stage, s.today])) },
+  { name: 'AI-assisted', ...Object.fromEntries(mttrByStage.map((s) => [s.stage, s.ai])) },
 ];
+const sentiment = currentStages.map((s, i) => ({ stage: `${s.id}`, today: s.sentiment, ai: aiStages[i].aiSentiment }));
+const kpi = (id: string) => kpis.find((k) => k.id === id)!;
+const pair = (id: string) => [{ name: 'Today', v: kpi(id).today }, { name: 'AI-assisted', v: kpi(id).ai }];
 const axis = { stroke: '#64748b', fontSize: 12 };
 const tooltipStyle = { background: '#101828', border: '1px solid #243049', borderRadius: 8, color: '#e2e8f0' };
 
@@ -47,70 +52,51 @@ function Gauge({ value, color, label }: { value: number; color: string; label: s
   );
 }
 
-function Donut({ value, color, label }: { value: number; color: string; label: string }) {
-  const data = [{ v: value }, { v: 100 - value }];
-  return (
-    <div className="relative h-full flex-1">
-      <ResponsiveContainer>
-        <PieChart>
-          <Pie data={data} dataKey="v" innerRadius="60%" outerRadius="85%" stroke="none" startAngle={90} endAngle={-270}>
-            <Cell fill={color} />
-            <Cell fill="#243049" />
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="text-2xl font-bold text-white">{value}%</div>
-        <div className="text-xs text-slate-400">{label}</div>
-      </div>
-    </div>
-  );
-}
-
 export default function Dashboard() {
   return (
     <div>
       <SectionHeader
         title="KPI Dashboard"
-        subtitle="Today (manual process) versus AI-assisted across the CVE lifecycle."
-        right={<Disclaimer>{DISCLAIMER_FIGURES}</Disclaimer>}
+        subtitle="Today versus AI-assisted across your 8-stage process. Only the 2–3 hrs baseline is customer-quoted."
+        right={<div className="flex flex-wrap items-center gap-2"><Badge kind="quoted" /><Disclaimer>{DISCLAIMER_FIGURES}</Disclaimer></div>}
       />
 
       <div className="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
-        <Panel title="MTTR by severity (days)">
+        <Panel title="Time to find what's impacted (minutes, per CVE) – customer-quoted baseline">
           <ResponsiveContainer>
-            <BarChart data={mttrBySeverity}>
+            <BarChart data={pair('discover')}>
               <CartesianGrid stroke="#243049" strokeDasharray="3 3" />
-              <XAxis dataKey="severity" {...axis} />
+              <XAxis dataKey="name" {...axis} />
               <YAxis {...axis} />
-              <Tooltip contentStyle={tooltipStyle} />
-              <Legend />
-              <Bar dataKey="today" name="Today" fill={TODAY} radius={[4, 4, 0, 0]} />
-              <Bar dataKey="ai" name="AI-assisted" fill={AI} radius={[4, 4, 0, 0]} />
+              <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => `${v} min`} />
+              <Bar dataKey="v" radius={[4, 4, 0, 0]}>
+                <Cell fill={TODAY} />
+                <Cell fill={AI} />
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </Panel>
 
-        <Panel title="Exposure window trend – critical, internet-facing (days, 12 months)">
+        <Panel title="Sentiment by stage (+3 … −3)">
           <ResponsiveContainer>
-            <LineChart data={exposureTrend}>
+            <LineChart data={sentiment}>
               <CartesianGrid stroke="#243049" strokeDasharray="3 3" />
-              <XAxis dataKey="month" {...axis} />
-              <YAxis {...axis} />
+              <XAxis dataKey="stage" {...axis} />
+              <YAxis domain={[-3, 3]} ticks={[-3, -2, -1, 0, 1, 2, 3]} {...axis} />
               <Tooltip contentStyle={tooltipStyle} />
               <Legend />
-              <Line type="monotone" dataKey="today" name="Today" stroke={TODAY} strokeWidth={2.5} dot={false} />
-              <Line type="monotone" dataKey="ai" name="AI-assisted" stroke={AI} strokeWidth={2.5} dot={false} />
+              <Line type="monotone" dataKey="today" name="Today" stroke={TODAY} strokeWidth={2.5} />
+              <Line type="monotone" dataKey="ai" name="AI-assisted" stroke={AI} strokeWidth={2.5} />
             </LineChart>
           </ResponsiveContainer>
         </Panel>
 
-        <Panel title="CVE backlog burndown (open CVEs, 48 weeks)">
+        <Panel title="Assets verified vs 27 applications (weeks)">
           <ResponsiveContainer>
-            <AreaChart data={backlogBurndown}>
+            <AreaChart data={verifiedInventory}>
               <CartesianGrid stroke="#243049" strokeDasharray="3 3" />
               <XAxis dataKey="week" {...axis} />
-              <YAxis {...axis} />
+              <YAxis domain={[0, 27]} {...axis} />
               <Tooltip contentStyle={tooltipStyle} />
               <Legend />
               <Area type="monotone" dataKey="today" name="Today" stroke={TODAY} fill={TODAY} fillOpacity={0.25} />
@@ -119,36 +105,46 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </Panel>
 
-        <Panel title="Change success rate">
+        <Panel title="% of version checks automated">
           <div className="flex h-full">
-            <Gauge value={changeSuccess.today} color={TODAY} label="Today" />
-            <Gauge value={changeSuccess.ai} color={AI} label="AI-assisted" />
+            <Gauge value={versionChecks.today} color={TODAY} label="Today" />
+            <Gauge value={versionChecks.ai} color={AI} label="AI-assisted" />
           </div>
         </Panel>
 
-        <Panel title="Effort hours by stage (per CVE)">
+        <Panel title="End-to-end MTTR by stage (days)">
           <ResponsiveContainer>
             <BarChart data={effortStacked} layout="vertical">
               <CartesianGrid stroke="#243049" strokeDasharray="3 3" />
               <XAxis type="number" {...axis} />
               <YAxis type="category" dataKey="name" {...axis} width={90} />
               <Tooltip contentStyle={tooltipStyle} />
-              <Legend />
-              {effortByStage.map((s, i) => (
-                <Bar key={s.stage} dataKey={s.stage} stackId="effort" fill={STAGE_COLORS[i % STAGE_COLORS.length]} />
+              <Legend wrapperStyle={{ fontSize: 11 }} />
+              {mttrByStage.map((s, i) => (
+                <Bar key={s.stage} dataKey={s.stage} stackId="mttr" fill={STAGE_COLORS[i % STAGE_COLORS.length]} />
               ))}
             </BarChart>
           </ResponsiveContainer>
         </Panel>
 
-        <Panel title="% of CVEs auto-triaged">
-          <div className="flex h-full">
-            <Donut value={autoTriage[0].today} color={TODAY} label="Today" />
-            <Donut value={autoTriage[0].ai} color={AI} label="AI-assisted" />
-          </div>
+        <Panel title="After-hours hours · production failures looped back to lab · leadership update hours">
+          <ResponsiveContainer>
+            <BarChart data={[
+              { name: 'After-hours h', today: kpi('afterhours').today, ai: kpi('afterhours').ai },
+              { name: 'Looped to lab', today: kpi('looped').today, ai: kpi('looped').ai },
+              { name: 'Leadership h', today: kpi('leadership').today, ai: kpi('leadership').ai },
+            ]}>
+              <CartesianGrid stroke="#243049" strokeDasharray="3 3" />
+              <XAxis dataKey="name" {...axis} />
+              <YAxis {...axis} />
+              <Tooltip contentStyle={tooltipStyle} />
+              <Legend />
+              <Bar dataKey="today" name="Today" fill={TODAY} radius={[4, 4, 0, 0]} />
+              <Bar dataKey="ai" name="AI-assisted" fill={AI} radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </Panel>
       </div>
-
       <h2 className="mb-3 mt-10 text-xl font-bold text-white">KPI definitions</h2>
       <div className="card overflow-x-auto p-0">
         <table className="w-full">
@@ -174,3 +170,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+

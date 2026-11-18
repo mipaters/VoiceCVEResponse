@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  BarChart3, Bot, GitCompare, LayoutDashboard, Layers, Map, Presentation, Route, ShieldCheck,
+  BarChart3, Bot, ClipboardList, GitCompare, LayoutDashboard, Layers, Map, Presentation, Route, ShieldCheck,
 } from 'lucide-react';
 import type { ComponentType } from 'react';
 import { personas, personaFocus, type Persona } from './data/kpis';
-import { PersonaContext } from './components/PersonaContext';
+import { PersonaContext, PrioritiesContext } from './components/PersonaContext';
+import { initialPriorities, type Priority } from './data/priorities';
+import WhatYouToldUs from './sections/WhatYouToldUs';
 import ExecutiveSummary from './sections/ExecutiveSummary';
 import Comparison from './sections/Comparison';
 import Scenario from './sections/Scenario';
@@ -15,10 +17,11 @@ import AgentCatalogue from './sections/AgentCatalogue';
 import Roadmap from './sections/Roadmap';
 import Presenter from './sections/Presenter';
 
-type SectionId = 'summary' | 'compare' | 'scenario' | 'dashboard' | 'arch' | 'agents' | 'roadmap' | 'present';
+type SectionId = 'summary' | 'told' | 'compare' | 'scenario' | 'dashboard' | 'arch' | 'agents' | 'roadmap' | 'present';
 
 const sections: { id: SectionId; label: string; icon: ComponentType<{ className?: string }> }[] = [
   { id: 'summary', label: 'Executive Summary', icon: LayoutDashboard },
+  { id: 'told', label: 'What you told us', icon: ClipboardList },
   { id: 'compare', label: 'Today vs AI-Assisted', icon: GitCompare },
   { id: 'scenario', label: 'Scenario Walkthrough', icon: Route },
   { id: 'dashboard', label: 'KPI Dashboard', icon: BarChart3 },
@@ -32,11 +35,22 @@ export default function App() {
   const [active, setActive] = useState<SectionId>('summary');
   const [persona, setPersona] = useState<Persona>('CTO');
 
+  const [items, setItems] = useState<Priority[]>(initialPriorities);
+  const setVotes = useCallback((id: string, field: 'teamVotes' | 'superVotes', value: number) => {
+    setItems((prev) => prev.map((p) => (p.id === id ? { ...p, [field]: value } : p)));
+  }, []);
+  const reset = useCallback(() => setItems(initialPriorities), []);
+
   if (active === 'present') {
-    return <Presenter onExit={() => setActive('summary')} />;
+    return (
+      <PrioritiesContext.Provider value={{ items, setVotes, reset }}>
+        <Presenter onExit={() => setActive('summary')} />
+      </PrioritiesContext.Provider>
+    );
   }
 
   return (
+    <PrioritiesContext.Provider value={{ items, setVotes, reset }}>
     <PersonaContext.Provider value={persona}>
       <div className="flex min-h-screen">
         <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-noc-600/60 bg-noc-900/80 p-4 md:flex">
@@ -108,6 +122,7 @@ export default function App() {
                 transition={{ duration: 0.18 }}
               >
                 {active === 'summary' && <ExecutiveSummary />}
+                {active === 'told' && <WhatYouToldUs />}
                 {active === 'compare' && <Comparison />}
                 {active === 'scenario' && <Scenario />}
                 {active === 'dashboard' && <Dashboard />}
@@ -124,5 +139,7 @@ export default function App() {
         </div>
       </div>
     </PersonaContext.Provider>
+    </PrioritiesContext.Provider>
   );
 }
+

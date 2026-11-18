@@ -19,3 +19,18 @@ export function Disclaimer({ children }: { children: ReactNode }) {
     </span>
   );
 }
+
+const badgeStyles = {
+  customer: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300',
+  quoted: 'border-sky-500/40 bg-sky-500/10 text-sky-300',
+  illustrative: 'border-amber-500/40 bg-amber-500/10 text-amber-300',
+} as const;
+
+export function Badge({ kind, children }: { kind: keyof typeof badgeStyles; children?: ReactNode }) {
+  const text = children ?? (kind === 'customer' ? 'Customer-validated (workshop)' : kind === 'quoted' ? 'Customer-quoted baseline' : 'Illustrative – to be validated');
+  return (
+    <span className={`inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${badgeStyles[kind]}`}>
+      {text}
+    </span>
+  );
+}

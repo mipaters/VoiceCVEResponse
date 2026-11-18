@@ -1,147 +1,127 @@
-// Single source of truth for every number shown in the demo.
-// All figures are illustrative targets – to be validated in discovery.
+// Single source of truth for the numbers shown in the demo.
+// Only the baseline marked `quoted: true` comes from the customer; everything else is
+// "Illustrative – to be validated".
 
-export const DISCLAIMER_FIGURES = 'Illustrative targets – to be validated in discovery';
+export const DISCLAIMER_FIGURES = 'Illustrative – to be validated';
+export const BADGE_QUOTED = 'Customer-quoted baseline';
 
 export const network = {
-  enterpriseCustomers: 4200,
-  seats: 1_100_000,
-  sbcNodes: 24,
-  cmdbCIs: 3800,
-  maintenanceWindow: 'Tue/Thu 00:00–05:00',
+  applications: 27,
+  onPremPct: 95,
 };
 
 export interface Kpi {
   id: string;
   name: string;
-  short: string;
   today: number;
   ai: number;
   unit: string;
   lowerIsBetter: boolean;
   todayLabel: string;
   aiLabel: string;
+  quoted?: boolean;
   note?: string;
 }
 
 export const kpis: Kpi[] = [
-  { id: 'mttt', name: 'Mean time to triage (MTTT)', short: 'MTTT', today: 120, ai: 2, unit: 'hours', lowerIsBetter: true, todayLabel: '5 days', aiLabel: '2 hours' },
-  { id: 'mttr', name: 'Mean time to remediate – critical CVEs (MTTR)', short: 'MTTR', today: 38, ai: 6, unit: 'days', lowerIsBetter: true, todayLabel: '38 days', aiLabel: '6 days' },
-  { id: 'exposure', name: 'Exposure window (critical, internet-facing)', short: 'Exposure', today: 45, ai: 7, unit: 'days', lowerIsBetter: true, todayLabel: '45 days', aiLabel: '7 days' },
-  { id: 'hours', name: 'Analyst hours per CVE', short: 'Analyst hrs', today: 22, ai: 4, unit: 'hours', lowerIsBetter: true, todayLabel: '22 h', aiLabel: '4 h' },
-  { id: 'change', name: 'Change success rate', short: 'Change success', today: 91, ai: 98.5, unit: '%', lowerIsBetter: false, todayLabel: '91%', aiLabel: '98.5%', note: 'Change-related voice outages per quarter: 7 → 1' },
-  { id: 'compliance', name: 'SLA / regulatory patch compliance', short: 'Compliance', today: 72, ai: 96, unit: '%', lowerIsBetter: false, todayLabel: '72%', aiLabel: '96%' },
+  { id: 'discover', name: 'Time to find what\'s impacted (per CVE)', today: 150, ai: 10, unit: 'min', lowerIsBetter: true, todayLabel: '2–3 hrs', aiLabel: '< 10 min', quoted: true, note: 'Baseline quoted by the customer; assessment only' },
+  { id: 'coverage', name: 'Assets discovered vs CMDB', today: 78, ai: 98, unit: '%', lowerIsBetter: false, todayLabel: '78%', aiLabel: '98%', note: 'Share of real assets/packages known and verified' },
+  { id: 'versions', name: '% of version checks automated', today: 10, ai: 90, unit: '%', lowerIsBetter: false, todayLabel: '10%', aiLabel: '90%' },
+  { id: 'brief', name: 'Assessment brief turnaround', today: 48, ai: 2, unit: 'hours', lowerIsBetter: true, todayLabel: '2 days', aiLabel: '2 hours' },
+  { id: 'afterhours', name: 'After-hours / weekend hours per critical CVE', today: 14, ai: 3, unit: 'hours', lowerIsBetter: true, todayLabel: '14 h', aiLabel: '3 h' },
+  { id: 'looped', name: 'Production failures looped back to lab (per quarter)', today: 6, ai: 1, unit: 'failures', lowerIsBetter: true, todayLabel: '6', aiLabel: '1' },
+  { id: 'mttr', name: 'End-to-end MTTR (critical CVEs)', today: 30, ai: 7, unit: 'days', lowerIsBetter: true, todayLabel: '30 days', aiLabel: '7 days' },
+  { id: 'leadership', name: 'Leadership update effort (per CVE)', today: 6, ai: 1, unit: 'hours', lowerIsBetter: true, todayLabel: '6 h', aiLabel: '1 h' },
 ];
 
-export const outagesPerQuarter = { today: 7, ai: 1 };
-
-// Value-at-stake model (editable in the UI)
 export const valueModel = {
-  outageCostPerMinute: 18_000, // $ per enterprise-voice outage-minute (assumption)
-  avgOutageMinutes: 42,
-  cvesPerYear: 1_450,
-  analystHourlyCost: 95,
-  hoursPerCveToday: 22,
-  hoursPerCveAi: 4,
-  outagesPerYearToday: outagesPerQuarter.today * 4,
-  outagesPerYearAi: outagesPerQuarter.ai * 4,
+  cveEventsPerYear: 120,
+  engineerHourlyCost: 95,
+  assessHoursToday: 2.5,
+  assessHoursAi: 10 / 60,
+  afterHoursToday: 14,
+  afterHoursAi: 3,
+  leadershipToday: 6,
+  leadershipAi: 1,
+  briefHoursToday: 6,
+  briefHoursAi: 0.5,
 };
 
 export const headline = {
-  title: 'From 38 days to 6 days: AI-assisted vulnerability remediation for enterprise voice',
-  daysToday: 38,
-  daysAi: 6,
+  title: 'From 2–3 hours to under 10 minutes to find what\'s impacted – AI-assisted CVE response for 27 applications',
+  daysToday: 30,
+  daysAi: 7,
 };
 
 export const scenarioSummary = {
-  elapsedToday: '38 days',
-  elapsedAi: '6 days',
-  analystHoursToday: 140,
-  analystHoursAi: 31,
-  incidents: 0,
+  elapsedToday: '30 days',
+  elapsedAi: '7 days',
+  findToday: '2–3 hrs',
+  findAi: '8 min',
+  afterHoursToday: '14 h',
+  afterHoursAi: '3 h',
+  productionFailures: 0,
 };
 
 export const scenarioFacts = {
-  cveId: 'CVE-2026-41877',
-  cvss: 9.8,
-  sbcsTotal: 24,
-  sbcsVulnerable: 18,
-  sbcsInternetFacing: 6,
-  customers: 1140,
-  seats: 312_000,
-  e911Customers: 41,
-  mrrExposed: 2_300_000,
-  riskScore: 96,
-  testCases: 214,
-  testFailures: 2,
+  cveId: 'CVE-2026-31337',
+  cvss: 9.1,
+  appsTotal: 27,
+  appsAffected: 9,
+  appsInUse: 7,
+  appsPublicFacing: 3,
+  hosts: 64,
+  riskScore: 91,
+  labTests: 168,
+  labFailures: 3,
 };
 
-export const mttrBySeverity = [
-  { severity: 'Critical', today: 38, ai: 6 },
-  { severity: 'High', today: 52, ai: 14 },
-  { severity: 'Medium', today: 78, ai: 30 },
-  { severity: 'Low', today: 110, ai: 45 },
+// Illustrative elapsed days per stage – end-to-end MTTR build-up
+export const mttrByStage = [
+  { stage: 'Identify Incident', today: 1, ai: 0.1 },
+  { stage: 'Assessment', today: 4, ai: 0.5 },
+  { stage: 'Risk', today: 3, ai: 0.5 },
+  { stage: 'Develop Strategy', today: 6, ai: 1 },
+  { stage: 'Validation for Lab', today: 4, ai: 1 },
+  { stage: 'Integrate into Lab', today: 3, ai: 1.5 },
+  { stage: 'Deploy into Production', today: 7, ai: 2 },
+  { stage: 'Validation', today: 2, ai: 0.4 },
 ];
 
-export const exposureTrend = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-].map((month, i) => ({
-  month,
-  today: [46, 44, 47, 45, 48, 45, 44, 46, 45, 47, 45, 45][i],
-  ai: [45, 40, 31, 24, 18, 14, 11, 9, 8, 7, 7, 7][i],
-}));
-
-export const backlogBurndown = [
-  'W0', 'W4', 'W8', 'W12', 'W16', 'W20', 'W24', 'W28', 'W32', 'W36', 'W40', 'W44', 'W48',
+export const verifiedInventory = [
+  'Wk 0', 'Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6', 'Wk 7', 'Wk 8',
 ].map((week, i) => ({
   week,
-  today: [412, 420, 428, 431, 436, 440, 445, 441, 447, 452, 449, 455, 458][i],
-  ai: [412, 380, 322, 265, 210, 166, 128, 96, 71, 52, 40, 31, 24][i],
+  today: 11,
+  ai: [11, 14, 18, 21, 24, 25, 26, 27, 27][i],
 }));
 
-export const changeSuccess = { today: 91, ai: 98.5 };
-
-export const effortByStage = [
-  { stage: 'Intake', today: 2.0, ai: 0.2 },
-  { stage: 'Impact', today: 4.5, ai: 0.5 },
-  { stage: 'Risk', today: 2.0, ai: 0.3 },
-  { stage: 'Mitigation', today: 3.0, ai: 0.6 },
-  { stage: 'Approval', today: 2.5, ai: 0.4 },
-  { stage: 'Testing', today: 3.0, ai: 0.8 },
-  { stage: 'Lab', today: 1.5, ai: 0.4 },
-  { stage: 'Production', today: 2.5, ai: 0.6 },
-  { stage: 'Closure', today: 1.0, ai: 0.2 },
-];
-
-export const autoTriage = [
-  { name: 'Auto-triaged', today: 18, ai: 84 },
-  { name: 'Analyst-reviewed', today: 82, ai: 16 },
-];
+export const versionChecks = { today: 10, ai: 90 };
 
 export const kpiDefinitions = [
-  { kpi: 'MTTT', definition: 'Time from advisory publication to a validated triage decision', formula: 'avg(triage_decision_ts − advisory_published_ts)', source: 'NVD / PSIRT feeds, ServiceNow', today: '5 days', target: '2 hours' },
-  { kpi: 'MTTR (critical)', definition: 'Time from advisory publication to verified remediation of all affected CIs', formula: 'avg(rescan_clean_ts − advisory_published_ts)', source: 'ServiceNow, Tenable/Qualys', today: '38 days', target: '6 days' },
-  { kpi: 'Exposure window', definition: 'Days a critical, internet-facing voice CI remains vulnerable after a KEV listing', formula: 'avg(remediated_ts − kev_added_ts) for internet-facing CIs', source: 'CISA KEV, CMDB, scanners', today: '45 days', target: '7 days' },
-  { kpi: 'Analyst hours / CVE', definition: 'Human effort across all lifecycle stages per CVE', formula: 'sum(timesheet + ticket effort) / CVE count', source: 'ServiceNow, time tracking', today: '22 h', target: '4 h' },
-  { kpi: 'Change success rate', definition: 'Share of security changes closed without rollback or incident', formula: 'successful_changes / total_changes', source: 'ServiceNow Change', today: '91%', target: '98.5%' },
-  { kpi: 'Patch compliance', definition: 'Share of CVEs remediated inside regulatory / contractual SLA', formula: 'cves_within_sla / cves_due', source: 'ServiceNow, audit evidence store', today: '72%', target: '96%' },
-  { kpi: '% auto-triaged', definition: 'CVEs triaged by agents without analyst rework', formula: 'auto_triaged / total_cves', source: 'Agent audit trail', today: '18%', target: '84%' },
+  { kpi: 'Time to find what\'s impacted', definition: 'Elapsed time from validated CVE to a confirmed list of impacted assets (assessment only)', formula: 'avg(impact_list_ts − triage_ts)', source: 'Agent audit trail, assessment brief', today: '2–3 hrs (customer-quoted)', target: '< 10 min' },
+  { kpi: 'Assets discovered vs CMDB', definition: 'Share of real hosts / packages in the live estate that are known and verified', formula: 'verified_assets / discovered_assets', source: 'CMDB, hypervisor/VM inventory, package manifests', today: '78%', target: '98%' },
+  { kpi: '% version checks automated', definition: 'OS and package version checks performed by read-only automation instead of manual log-in', formula: 'automated_checks / total_checks', source: 'Ansible / agent logs', today: '10%', target: '90%' },
+  { kpi: 'Assessment brief turnaround', definition: 'Time from impact confirmed to the Development Assessment Brief reaching Jay', formula: 'avg(brief_sent_ts − impact_confirmed_ts)', source: 'Teams, ServiceNow', today: '2 days', target: '2 hours' },
+  { kpi: 'After-hours / weekend hours', definition: 'Engineer hours outside business hours per critical CVE', formula: 'sum(after_hours_effort) / critical CVEs', source: 'Change tickets, time tracking', today: '14 h', target: '3 h' },
+  { kpi: 'Production failures looped back to lab', definition: 'Production changes that fail and return to the lab', formula: 'count(failed_prod_changes → lab) per quarter', source: 'ServiceNow Change', today: '6 / qtr', target: '1 / qtr' },
+  { kpi: 'End-to-end MTTR', definition: 'Time from incident identified to verified remediation', formula: 'avg(validated_ts − identified_ts)', source: 'ServiceNow, scanners', today: '30 days', target: '7 days' },
+  { kpi: 'Leadership update effort', definition: 'Engineer hours spent on updates and follow-up to leadership per CVE', formula: 'sum(comms_effort) / CVE count', source: 'Time tracking, Teams', today: '6 h', target: '1 h' },
 ];
 
 export const personas = ['CTO', 'CISO', 'NetOps', 'Change Manager'] as const;
 export type Persona = (typeof personas)[number];
 
-// KPI ordering and emphasis per persona
 export const personaKpiOrder: Record<Persona, string[]> = {
-  CTO: ['mttr', 'hours', 'change', 'exposure', 'compliance', 'mttt'],
-  CISO: ['exposure', 'mttt', 'mttr', 'compliance', 'change', 'hours'],
-  NetOps: ['change', 'mttr', 'hours', 'exposure', 'mttt', 'compliance'],
-  'Change Manager': ['change', 'compliance', 'mttr', 'hours', 'mttt', 'exposure'],
+  CTO: ['mttr', 'discover', 'coverage', 'leadership', 'versions', 'brief', 'afterhours', 'looped'],
+  CISO: ['discover', 'coverage', 'mttr', 'versions', 'brief', 'leadership', 'looped', 'afterhours'],
+  NetOps: ['looped', 'afterhours', 'discover', 'versions', 'coverage', 'mttr', 'brief', 'leadership'],
+  'Change Manager': ['looped', 'brief', 'leadership', 'afterhours', 'mttr', 'versions', 'discover', 'coverage'],
 };
 
 export const personaFocus: Record<Persona, string> = {
-  CTO: 'Cost, speed and platform strategy – fewer analyst hours, faster delivery, a reusable agent platform.',
-  CISO: 'Risk reduction – shrink exposure windows for KEV-listed and internet-facing assets, with audit-ready evidence.',
-  NetOps: 'Service protection – canary rollouts, KPI guardrails (ASR, PDD, MOS) and automatic rollback.',
-  'Change Manager': 'Governance – auto-built change requests, right approvers, Teams approvals, audit trail.',
+  CTO: 'Speed and efficiency – less time on assessment, a reusable agent platform across 27 applications.',
+  CISO: 'Exposure – know exactly what is impacted in minutes, with public-facing risk surfaced first.',
+  NetOps: 'Operations – fewer after-hours changes and fewer production failures looping back to the lab.',
+  'Change Manager': 'Governance – auto-built tickets, MOPs and approvals with time-of-day rules.',
 };

@@ -1,11 +1,23 @@
 import { CheckCircle2, ClipboardList, Gauge } from 'lucide-react';
 import { roadmap } from '../data/roadmap';
-import { SectionHeader } from '../components/ui';
+import { phase0Scope } from '../data/priorities';
+import { usePriorities } from '../components/PersonaContext';
+import { Badge, SectionHeader } from '../components/ui';
 
 export default function Roadmap() {
+  const { items } = usePriorities();
+  const { top, agents } = phase0Scope(items);
   return (
     <div>
-      <SectionHeader title="Roadmap" subtitle="From a 30-day proof of concept to closed-loop, policy-governed remediation." />
+      <SectionHeader title="Roadmap" subtitle="From a 30-day proof of concept on your top 3 jobs to closed-loop, policy-governed remediation." right={<Badge kind="illustrative" />} />
+      <div className="card mb-4 border-accent/50">
+        <div className="flex flex-wrap items-center gap-2">
+          <h2 className="text-lg font-semibold text-white">Phase 0 POC scope – from your dot vote</h2>
+          <Badge kind="customer" />
+        </div>
+        <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm text-slate-200">{top.map((t) => <li key={t.id}>{t.job}</li>)}</ol>
+        <div className="mt-2 flex flex-wrap gap-2">{agents.map((a) => <span key={a} className="chip border-accent/60 text-accent">{a}</span>)}</div>
+      </div>
       <div className="relative grid gap-4 lg:grid-cols-4">
         {roadmap.map((p, i) => (
           <div key={p.id} className="card flex flex-col gap-4">

@@ -1,12 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, X } from 'lucide-react';
+import { Bot, UserCheck } from 'lucide-react';
 import { slides } from '../data/slides';
+import { currentStages } from '../data/currentProcess';
+import { aiStages } from '../data/aiProcess';
+import { phase0Scope } from '../data/priorities';
+import JourneyMap from '../components/JourneyMap';
+import PrioritiesBoard from '../components/PrioritiesBoard';
+import { usePriorities } from '../components/PersonaContext';
+import { Badge } from '../components/ui';
 
 export default function Presenter({ onExit }: { onExit: () => void }) {
   const [i, setI] = useState(0);
   const [notes, setNotes] = useState(true);
   const slide = slides[i];
+  const { items } = usePriorities();
+  const { agents: phase0Agents } = phase0Scope(items);
 
   const next = useCallback(() => setI((v) => Math.min(v + 1, slides.length - 1)), []);
   const prev = useCallback(() => setI((v) => Math.max(v - 1, 0)), []);
@@ -25,7 +35,7 @@ export default function Presenter({ onExit }: { onExit: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-noc-950">
       <div className="flex items-center justify-between px-8 py-4 text-sm text-slate-500">
-        <span className="font-semibold tracking-widest text-accent">VOICESHIELD AI</span>
+        <span className="font-semibold tracking-widest text-accent">VOICESHIELD AI · CVE RESPONSE</span>
         <span>{i + 1} / {slides.length}</span>
         <button className="btn" onClick={onExit}><X className="h-4 w-4" /> Exit (Esc)</button>
       </div>
@@ -42,6 +52,25 @@ export default function Presenter({ onExit }: { onExit: () => void }) {
           >
             <h1 className="text-5xl font-extrabold tracking-tight text-white lg:text-6xl">{slide.title}</h1>
             {slide.subtitle && <p className="mt-3 text-2xl text-accent">{slide.subtitle}</p>}
+            {(slide.visual === 'journey' || slide.visual === 'priorities') && <div className="mt-3"><Badge kind="customer" /></div>}
+            {slide.visual === 'journey' && <div className="mt-6 text-left"><JourneyMap mode="today" compact /></div>}
+            {slide.visual === 'priorities' && (
+              <div className="mt-6 text-base">
+                <PrioritiesBoard limit={5} />
+                <div className="mt-4 flex flex-wrap items-center gap-2"><span className="text-sm font-semibold text-accent">Phase 0 POC scope:</span>{phase0Agents.map((a) => <span key={a} className="chip border-accent/60 text-accent">{a}</span>)}</div>
+              </div>
+            )}
+            {slide.visual === 'flow' && (
+              <div className="mt-8 grid grid-cols-2 gap-3 text-base lg:grid-cols-4">
+                {currentStages.map((s, k) => (
+                  <div key={s.id} className="rounded-lg border border-noc-600 bg-noc-800/70 p-3">
+                    <div className="font-semibold text-white">{s.id}. {s.name}</div>
+                    {aiStages[k].agents.map((a) => <div key={a} className="mt-1 flex items-center gap-1 text-sm text-emerald-300"><Bot className="h-4 w-4" />{a}</div>)}
+                    <div className="mt-1 flex items-start gap-1 text-sm text-amber-300"><UserCheck className="mt-0.5 h-4 w-4 shrink-0" />{aiStages[k].human ?? 'No approval – alerts only'}</div>
+                  </div>
+                ))}
+              </div>
+            )}
             <ul className="mt-8 space-y-4 text-2xl leading-snug text-slate-200 lg:text-3xl">
               {slide.bullets.map((b) => (
                 <li key={b} className="flex gap-4"><span className="mt-3 h-2.5 w-2.5 shrink-0 rounded-full bg-accent" />{b}</li>
@@ -81,3 +110,4 @@ export default function Presenter({ onExit }: { onExit: () => void }) {
     </div>
   );
 }
+
