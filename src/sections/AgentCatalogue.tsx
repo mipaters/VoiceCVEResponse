@@ -6,6 +6,7 @@ import { usePriorities } from '../components/PersonaContext';
 import { Badge, SectionHeader } from '../components/ui';
 import AssetAgentArchitecture from '../agents/asset-management/ArchitectureView';
 import AssessmentAgentArchitecture from '../agents/security-incident-assessment/ArchitectureView';
+import CoordinatorAgentArchitecture from '../agents/coordinator/ArchitectureView';
 
 function List({ items }: { items: string[] }) {
   return (
@@ -18,7 +19,8 @@ function List({ items }: { items: string[] }) {
 export default function AgentCatalogue() {
   const { items } = usePriorities();
   const phase0 = new Set(phase0Scope(items).agents);
-  const [view, setView] = useState<'list' | 'asset' | 'assessment'>('list');
+  const [view, setView] = useState<'list' | 'asset' | 'assessment' | 'coordinator'>('list');
+  if (view === 'coordinator') return <CoordinatorAgentArchitecture onBack={() => setView('list')} onOpenAgent={(id) => setView(id)} />;
   if (view === 'asset') return <AssetAgentArchitecture onBack={() => setView('list')} />;
   if (view === 'assessment') return <AssessmentAgentArchitecture onBack={() => setView('list')} onOpenInventory={() => setView('asset')} />;
   return (
@@ -60,6 +62,9 @@ export default function AgentCatalogue() {
             )}
             {a.name === 'Security Incident Assessment Agent' && (
               <button className="btn btn-primary self-start" onClick={() => setView('assessment')}>View Architecture</button>
+            )}
+            {a.name === 'Coordinator Agent' && (
+              <button className="btn btn-primary self-start" onClick={() => setView('coordinator')}>View Architecture</button>
             )}
             <div className="mt-auto flex items-center gap-2 border-t border-noc-600 pt-3 text-sm">
               <Target className="h-4 w-4 text-emerald-400" /> <span className="text-slate-400">KPI owned:</span> <span className="font-semibold text-emerald-300">{a.kpi}</span>
