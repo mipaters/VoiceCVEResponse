@@ -21,7 +21,7 @@ export default function AgentCatalogue() {
   const { items } = usePriorities();
   const phase0 = new Set(phase0Scope(items).agents);
   const [view, setView] = useState<'list' | 'asset' | 'assessment' | 'coordinator' | 'intake'>('list');
-  if (view === 'intake') return <CveIntakeAgentArchitecture onBack={() => setView('list')} onOpenCoordinator={() => setView('coordinator')} />;
+  if (view === 'intake') return <CveIntakeAgentArchitecture onBack={() => setView('list')} onOpenAssessment={() => setView('assessment')} />;
   if (view === 'coordinator') return <CoordinatorAgentArchitecture onBack={() => setView('list')} onOpenAgent={(id) => setView(id)} />;
   if (view === 'asset') return <AssetAgentArchitecture onBack={() => setView('list')} />;
   if (view === 'assessment') return <AssessmentAgentArchitecture onBack={() => setView('list')} onOpenInventory={() => setView('asset')} />;
