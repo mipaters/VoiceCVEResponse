@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Bot, ShieldCheck, Target, UserCheck, Wrench } from 'lucide-react';
 import { agents } from '../data/agents';
 import { phase0Scope } from '../data/priorities';
 import { usePriorities } from '../components/PersonaContext';
 import { Badge, SectionHeader } from '../components/ui';
+import AssetAgentArchitecture from '../agents/asset-management/ArchitectureView';
 
 function List({ items }: { items: string[] }) {
   return (
@@ -15,6 +17,8 @@ function List({ items }: { items: string[] }) {
 export default function AgentCatalogue() {
   const { items } = usePriorities();
   const phase0 = new Set(phase0Scope(items).agents);
+  const [showArch, setShowArch] = useState(false);
+  if (showArch) return <AssetAgentArchitecture onBack={() => setShowArch(false)} />;
   return (
     <div>
       <SectionHeader title="Agent Catalogue" subtitle="One agent per stage of your process plus a Coordinator, each with a human checkpoint and explicit guardrails." right={<Badge kind="illustrative" />} />
@@ -49,6 +53,9 @@ export default function AgentCatalogue() {
                 {a.guardrails.map((g) => <li key={g}>{g}</li>)}
               </ul>
             </div>
+            {a.name === 'Asset Discovery Agent' && (
+              <button className="btn btn-primary self-start" onClick={() => setShowArch(true)}>View Architecture</button>
+            )}
             <div className="mt-auto flex items-center gap-2 border-t border-noc-600 pt-3 text-sm">
               <Target className="h-4 w-4 text-emerald-400" /> <span className="text-slate-400">KPI owned:</span> <span className="font-semibold text-emerald-300">{a.kpi}</span>
             </div>
